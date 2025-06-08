@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 import '../widgets/smsci_card_widget.dart';
+import '../utils/app_styles.dart';
 
 /// Tela de Apontamentos por SMSCI
 /// 
@@ -21,7 +22,7 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Center(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 661), // 41.3125rem
+                    constraints: const BoxConstraints(maxWidth: 661), // 41.3125rem
                     child: _construirConteudo(),
                   ),
                 ),
@@ -36,7 +37,7 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
   Widget _construirCabecalho() {
     return Container(
       height: 64, // 4rem
-      padding: const EdgeInsets.all(8), // 0.5rem
+      padding: const EdgeInsets.all(AppStyles.spacingSmall), // 0.5rem
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
@@ -60,7 +61,7 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
             child: Text(
               'Vistoria em Andamento',
               style: TextStyle(
-                color: Color(0xFF333333),
+                color: AppStyles.darkGray,
                 fontSize: 18,
                 fontFamily: 'Roboto',
                 fontWeight: FontWeight.w400,
@@ -80,11 +81,11 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center, // align-items: center
       children: [
         _construirCabecalhoVistoria(),
-        const SizedBox(height: 40), // gap: 2.5rem (40px)
+        const SizedBox(height: AppStyles.spacingExtraLarge), // gap: 2.5rem (40px)
         _construirAbas(),
-        const SizedBox(height: 40), // gap: 2.5rem (40px)
+        const SizedBox(height: AppStyles.spacingExtraLarge), // gap: 2.5rem (40px)
         _construirInstrucoes(),
-        const SizedBox(height: 40), // gap: 2.5rem (40px)
+        const SizedBox(height: AppStyles.spacingExtraLarge), // gap: 2.5rem (40px)
         _construirSecaoSMSCI(),
       ],
     );
@@ -92,16 +93,16 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
 
   Widget _construirCabecalhoVistoria() {
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
+      padding: const EdgeInsets.only(top: AppStyles.spacingMedium),
       child: Row(
         children: [
-          const Icon(Icons.description, color: Color(0xFF333333)),
-          const SizedBox(width: 8),
+          const Icon(Icons.description, color: AppStyles.darkGray),
+          const SizedBox(width: AppStyles.spacingSmall),
           Expanded(
             child: Text(
               'Vistoria de Funcionamento',
-              style: TextStyle(
-                color: const Color(0xFFE66F0E),
+              style: const TextStyle(
+                color: AppStyles.primaryOrange,
                 fontSize: 18,
                 fontFamily: 'Roboto',
                 fontWeight: FontWeight.w600,
@@ -111,7 +112,7 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF168821),
+              backgroundColor: AppStyles.successGreen,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
               ),
@@ -119,12 +120,7 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
             ),
             child: const Text(
               'Concluir Vistoria',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppStyles.buttonText,
             ),
           ),
         ],
@@ -165,12 +161,7 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
       child: Center(
         child: Text(
           titulo,
-          style: TextStyle(
-            color: selecionada ? const Color(0xFFE66F0E) : const Color(0xFF767676),
-            fontSize: 18,
-            fontFamily: 'Roboto',
-            fontWeight: selecionada ? FontWeight.w600 : FontWeight.w400,
-          ),
+          style: selecionada ? AppStyles.tabSelected : AppStyles.tabUnselected,
         ),
       ),
     );
@@ -182,12 +173,7 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
         Expanded(
           child: Text(
             'Aponte apenas os itens indeferidos.',
-            style: TextStyle(
-              color: const Color(0xFF333333),
-              fontSize: 16,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w400,
-            ),
+            style: AppStyles.bodyLarge,
           ),
         ),
         OutlinedButton.icon(
@@ -195,8 +181,8 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
           icon: const Icon(Icons.table_chart, size: 18),
           label: const Text('Tabelas da IRV'),
           style: OutlinedButton.styleFrom(
-            foregroundColor: const Color(0xFFE66F0E),
-            side: const BorderSide(color: Color(0xFFE66F0E)),
+            foregroundColor: AppStyles.primaryOrange,
+            side: const BorderSide(color: AppStyles.primaryOrange),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100),
             ),
@@ -213,13 +199,7 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
       children: [
         Text(
           'Sistemas e Medidas de Segurança Contra Incêndio e Pânico (SMSCI)',
-          style: TextStyle(
-            color: const Color(0xFF333333), // Neutras-neutral-dark-gray
-            fontSize: 16,
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.w600,
-            height: 1.25,
-          ),
+          style: AppStyles.titleMedium,
         ),
         const SizedBox(height: 8),
         _construirGridSMSCI(),
@@ -233,8 +213,8 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
     return Wrap(
       alignment: WrapAlignment.start,
       runAlignment: WrapAlignment.start,
-      spacing: 24, // Espaçamento horizontal entre cards
-      runSpacing: 24, // Espaçamento vertical entre linhas de cards
+      spacing: AppStyles.spacingLarge, // Espaçamento horizontal entre cards
+      runSpacing: AppStyles.spacingLarge, // Espaçamento vertical entre linhas de cards
       children: _obterListaSMSCI().map((item) => SMSCICardWidget(
         titulo: item.titulo,
         onTap: () => _navegarParaDetalhesSMSCI(item),

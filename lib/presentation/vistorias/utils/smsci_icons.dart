@@ -34,6 +34,6 @@ class SMSCIIcons {
       'Plano de emergência': 'icons/plano_de_emergencia.svg',
     };
 
-    return iconesPorTipo[tipoSMSCI] ?? 'icons/Documentos_específicos_dos_SMSCI.svg';
+    return iconesPorTipo[tipoSMSCI] ?? 'icons/Documentos_especificos_dos_SMSCI.svg';
   }
 }

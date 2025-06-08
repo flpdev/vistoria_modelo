@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../utils/smsci_icons.dart';
+import '../utils/app_styles.dart';
 
 /// Widget de Card para exibição dos itens de SMSCI
 /// 
@@ -25,7 +26,7 @@ class SMSCICardWidget extends StatelessWidget {
     try {
       return SvgPicture.asset(
         SMSCIIcons.getIconPath(titulo),
-        colorFilter: const ColorFilter.mode(Color(0xFFE66F0E), BlendMode.srcIn),
+        colorFilter: const ColorFilter.mode(AppStyles.primaryOrange, BlendMode.srcIn),
         fit: BoxFit.contain,
         placeholderBuilder: (BuildContext context) => _buildFallbackIcon(),
       );
@@ -40,10 +41,10 @@ class SMSCICardWidget extends StatelessWidget {
     return Container(
       width: 48,
       height: 48,
-      color: const Color(0xFFF3F3F3),
+      color: AppStyles.lightGray,
       child: const Icon(
         Icons.folder,
-        color: Color(0xFFE66F0E),
+        color: AppStyles.primaryOrange,
         size: 32,
       ),
     );
@@ -58,7 +59,7 @@ class SMSCICardWidget extends StatelessWidget {
         width: 204.33,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
         decoration: ShapeDecoration(
-          color: const Color(0xFFF3F3F3), // Neutras-neutral-light-gray
+          color: AppStyles.lightGray,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: Column(
@@ -67,21 +68,11 @@ class SMSCICardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: 56,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(),
-                    child: _buildIconWidget(titulo),
-                  ),
-                ],
-              ),
+              width: 48,
+              height: 48,
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(),
+              child: _buildIconWidget(titulo),
             ),
             const SizedBox(height: 4),
             SizedBox(
@@ -92,13 +83,7 @@ class SMSCICardWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: Color(0xFF333333), // Neutras-neutral-dark-gray
-                  fontSize: 14,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w400,
-                  height: 1.43,
-                ),
+                style: AppStyles.bodyMedium,
               ),
             ),
           ],
