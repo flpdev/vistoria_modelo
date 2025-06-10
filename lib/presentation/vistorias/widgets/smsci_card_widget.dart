@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../utils/smsci_icons.dart';
@@ -24,14 +25,22 @@ class SMSCICardWidget extends StatelessWidget {
   /// Constrói o widget de ícone com tratamento de erro
   Widget _buildIconWidget(String titulo) {
     try {
+      final String iconPath = SMSCIIcons.getIconPath(titulo);
+      
       return SvgPicture.asset(
-        SMSCIIcons.getIconPath(titulo),
+        iconPath,
         colorFilter: const ColorFilter.mode(AppStyles.primaryOrange, BlendMode.srcIn),
         fit: BoxFit.contain,
         placeholderBuilder: (BuildContext context) => _buildFallbackIcon(),
+        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+          // Registra o erro para facilitar a depuração
+          developer.log('Erro ao carregar ícone SVG: $iconPath', error: exception, stackTrace: stackTrace);
+          return _buildFallbackIcon();
+        },
       );
     } catch (e) {
-      // Em caso de erro, exibe um ícone de fallback
+      // Em caso de erro, exibe um ícone de fallback e registra o erro
+      developer.log('Erro ao processar ícone para o SMSCI: $titulo', error: e);
       return _buildFallbackIcon();
     }
   }
@@ -39,13 +48,13 @@ class SMSCICardWidget extends StatelessWidget {
   /// Constrói um ícone de fallback para quando o SVG não puder ser carregado
   Widget _buildFallbackIcon() {
     return Container(
-      width: 48,
-      height: 48,
+      width: AppStyles.cardIconWidth,
+      height: AppStyles.cardIconHeight,
       color: AppStyles.lightGray,
       child: const Icon(
         Icons.folder,
         color: AppStyles.primaryOrange,
-        size: 32,
+        size: AppStyles.iconSizeMedium,
       ),
     );
   }
@@ -54,13 +63,13 @@ class SMSCICardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(AppStyles.borderRadiusMedium),
       child: Container(
-        width: 204.33,
+        width: AppStyles.cardWidth,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
         decoration: ShapeDecoration(
           color: AppStyles.lightGray,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppStyles.borderRadiusMedium)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -68,20 +77,20 @@ class SMSCICardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 48,
-              height: 48,
+              width: AppStyles.cardIconWidth,
+              height: AppStyles.cardIconHeight,
               clipBehavior: Clip.antiAlias,
               decoration: const BoxDecoration(),
               child: _buildIconWidget(titulo),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: AppStyles.spacingXSmall),
             SizedBox(
-              width: 184.33,
-              height: 60,
+              width: AppStyles.cardTextWidth,
+              height: AppStyles.cardTextHeight,
               child: Text(
                 titulo,
                 textAlign: TextAlign.center,
-                maxLines: 3,
+                maxLines: AppStyles.cardTextMaxLines.toInt(),
                 overflow: TextOverflow.ellipsis,
                 style: AppStyles.bodyMedium,
               ),

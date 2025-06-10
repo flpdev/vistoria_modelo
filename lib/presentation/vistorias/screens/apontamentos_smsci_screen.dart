@@ -9,9 +9,15 @@ import '../utils/app_styles.dart';
 /// para que o vistoriador possa registrar apontamentos de itens indeferidos.
 class ApontamentosSMSCIScreen extends StatelessWidget {
   const ApontamentosSMSCIScreen({super.key});
+  
+  // Contexto de construção para navegação
+  static late BuildContext _buildContext;
 
   @override
   Widget build(BuildContext context) {
+    // Salva o contexto para uso em navegação
+    _buildContext = context;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -22,7 +28,7 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Center(
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 661), // 41.3125rem
+                    constraints: const BoxConstraints(maxWidth: AppStyles.contentMaxWidth),
                     child: _construirConteudo(),
                   ),
                 ),
@@ -34,10 +40,11 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
     );
   }
 
+  /// Constrói o cabeçalho da tela com título e botão de voltar
   Widget _construirCabecalho() {
     return Container(
-      height: 64, // 4rem
-      padding: const EdgeInsets.all(AppStyles.spacingSmall), // 0.5rem
+      height: AppStyles.headerHeight,
+      padding: const EdgeInsets.all(AppStyles.spacingSmall),
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
@@ -46,26 +53,24 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 48,
-            height: 48,
+            width: AppStyles.iconSizeLarge,
+            height: AppStyles.iconSizeLarge,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
             ),
             child: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () {},
+              onPressed: () {
+                // Registra a ação para facilitar a depuração
+                developer.log('Voltando da tela de apontamentos SMSCI');
+              },
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: AppStyles.spacingSmall),
           const Expanded(
             child: Text(
               'Vistoria em Andamento',
-              style: TextStyle(
-                color: AppStyles.darkGray,
-                fontSize: 18,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w400,
-              ),
+              style: AppStyles.titleLarge,
             ),
           ),
         ],
@@ -91,17 +96,18 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
     );
   }
 
+  /// Constrói o cabeçalho com informações da vistoria e botão de concluir
   Widget _construirCabecalhoVistoria() {
     return Padding(
       padding: const EdgeInsets.only(top: AppStyles.spacingMedium),
       child: Row(
         children: [
           const Icon(Icons.description, color: AppStyles.darkGray),
-          const SizedBox(width: AppStyles.spacingSmall),
-          Expanded(
+          SizedBox(width: AppStyles.spacingSmall),
+          const Expanded(
             child: Text(
               'Vistoria de Funcionamento',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppStyles.primaryOrange,
                 fontSize: 18,
                 fontFamily: 'Roboto',
@@ -110,11 +116,14 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              // Registra a ação para facilitar a depuração
+              developer.log('Botão Concluir Vistoria pressionado');
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppStyles.successGreen,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(AppStyles.borderRadiusCircular),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
             ),
@@ -147,22 +156,24 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
     );
   }
 
+  /// Constrói uma aba para a navegação entre seções
+  /// 
+  /// [titulo] - Título da aba
+  /// [selecionada] - Indica se a aba está selecionada
   Widget _construirAba({required String titulo, required bool selecionada}) {
     return Container(
-      height: 40,
+      padding: const EdgeInsets.symmetric(vertical: AppStyles.spacingSmall),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: selecionada ? const Color(0xFFE66F0E) : const Color(0xFF767676),
-            width: selecionada ? 2 : 1,
+            color: selecionada ? AppStyles.primaryOrange : Colors.transparent,
+            width: 2,
           ),
         ),
       ),
-      child: Center(
-        child: Text(
-          titulo,
-          style: selecionada ? AppStyles.tabSelected : AppStyles.tabUnselected,
-        ),
+      child: Text(
+        titulo,
+        style: selecionada ? AppStyles.tabSelected : AppStyles.tabUnselected,
       ),
     );
   }
@@ -207,113 +218,185 @@ class ApontamentosSMSCIScreen extends StatelessWidget {
     );
   }
 
+  /// Constrói o grid de cards SMSCI com layout responsivo
   Widget _construirGridSMSCI() {
-    // Calculamos o número de colunas com base na largura disponível
-    // Para 3 colunas com cards de 204.33px e espaçamento de 24px
-    return Wrap(
-      alignment: WrapAlignment.start,
-      runAlignment: WrapAlignment.start,
-      spacing: AppStyles.spacingLarge, // Espaçamento horizontal entre cards
-      runSpacing: AppStyles.spacingLarge, // Espaçamento vertical entre linhas de cards
-      children: _obterListaSMSCI().map((item) => SMSCICardWidget(
-        titulo: item.titulo,
-        onTap: () => _navegarParaDetalhesSMSCI(item),
-      )).toList(),
-    );
+    try {
+      final List<ItemSMSCI> itensSMSCI = _obterListaSMSCI();
+      
+      return Wrap(
+        alignment: WrapAlignment.start,
+        runAlignment: WrapAlignment.start,
+        spacing: AppStyles.spacingLarge, // Espaçamento horizontal entre cards
+        runSpacing: AppStyles.spacingLarge, // Espaçamento vertical entre linhas de cards
+        children: itensSMSCI.map((item) => SMSCICardWidget(
+          titulo: item.titulo,
+          onTap: () => _navegarParaDetalhesSMSCI(item),
+        )).toList(),
+      );
+    } catch (e) {
+      // Em caso de erro na construção do grid, exibe uma mensagem de erro
+      developer.log('Erro ao construir grid SMSCI', error: e);
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(AppStyles.spacingLarge),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline, color: AppStyles.errorRed, size: 48),
+              SizedBox(height: AppStyles.spacingMedium),
+              const Text(
+                'Ocorreu um erro ao carregar os itens SMSCI',
+                style: TextStyle(color: AppStyles.errorRed),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 
+  /// Retorna a lista completa de itens SMSCI
   List<ItemSMSCI> _obterListaSMSCI() {
+    // Combina todas as categorias de SMSCI
     return [
-      ItemSMSCI(
-        titulo: 'Documentos específicos dos SMSCI',
-      ),
-      ItemSMSCI(
-        titulo: 'Características gerais do Bloco',
-      ),
-      ItemSMSCI(
-        titulo: 'Comercialização de Gás combustível e armazenamento de recipiente',
-      ),
-      ItemSMSCI(
-        titulo: 'Piscinas e áreas recreativas com opção aquática de lazer',
-      ),
-      ItemSMSCI(
-        titulo: 'Estufa de secagem e silos',
-      ),
-      ItemSMSCI(
-        titulo: 'Preventivo por extintores',
-      ),
-      ItemSMSCI(
-        titulo: 'Hidráulico preventivo',
-      ),
-      ItemSMSCI(
-        titulo: 'Detecção e Alarme de Incêndio',
-      ),
-      ItemSMSCI(
-        titulo: 'Iluminação de Emergência',
-      ),
-      ItemSMSCI(
-        titulo: 'Sinalização para abandono de local',
-      ),
-      ItemSMSCI(
-        titulo: 'Chuveiros automáticos (Sprinklers)',
-      ),
-      ItemSMSCI(
-        titulo: 'Proteção contra descargas atmosféricas (SPDA)',
-      ),
-      ItemSMSCI(
-        titulo: 'Controle de fumaça',
-      ),
-      ItemSMSCI(
-        titulo: 'Fixo de gases limpos e dióxido de carbono',
-      ),
-      ItemSMSCI(
-        titulo: 'Água nebulizada',
-      ),
-      ItemSMSCI(
-        titulo: 'Controle de materiais de acabamento e revestimento',
-      ),
-      ItemSMSCI(
-        titulo: 'Saídas de emergência',
-      ),
-      ItemSMSCI(
-        titulo: 'Acesso de viaturas',
-      ),
-      ItemSMSCI(
-        titulo: 'Compartimentação horizontal e vertical',
-      ),
-      ItemSMSCI(
-        titulo: 'Instalações de gás combustível',
-      ),
-      ItemSMSCI(
-        titulo: 'Instalações elétricas de baixa tensão',
-      ),
-      ItemSMSCI(
-        titulo: 'Parque para armazenamentos de líquidos inflamáveis e combustíveis',
-      ),
-      ItemSMSCI(
-        titulo: 'Rede pública de hidrantes',
-      ),
-      ItemSMSCI(
-        titulo: 'Pátio de contêineres',
-      ),
-      ItemSMSCI(
-        titulo: 'Locais onde a liberdade das pessoas sofre restrições',
-      ),
-      ItemSMSCI(
-        titulo: 'Fogos de artifícios, explosivos e munições',
-      ),
-      ItemSMSCI(
-        titulo: 'Brigada de Incêndio',
-      ),
-      ItemSMSCI(
-        titulo: 'Plano de emergência',
-      ),
+      ..._obterDocumentacao(),
+      ..._obterCaracteristicasEdificacao(),
+      ..._obterSistemasCombateIncendio(),
+      ..._obterSistemasDeteccaoAlarme(),
+      ..._obterSistemasProtecaoEstrutural(),
+      ..._obterInstalacoesGasEletricas(),
+      ..._obterAreasEspecificas(),
+      ..._obterPlanosEBrigadas(),
     ];
   }
 
+  /// Retorna itens SMSCI relacionados à documentação
+  List<ItemSMSCI> _obterDocumentacao() {
+    return [
+      ItemSMSCI(titulo: 'Documentos específicos dos SMSCI'),
+    ];
+  }
+
+  /// Retorna itens SMSCI relacionados às características da edificação
+  List<ItemSMSCI> _obterCaracteristicasEdificacao() {
+    return [
+      ItemSMSCI(titulo: 'Características gerais do Bloco'),
+    ];
+  }
+
+  /// Retorna itens SMSCI relacionados aos sistemas de combate a incêndio
+  List<ItemSMSCI> _obterSistemasCombateIncendio() {
+    return [
+      ItemSMSCI(titulo: 'Preventivo por extintores'),
+      ItemSMSCI(titulo: 'Hidráulico preventivo'),
+      ItemSMSCI(titulo: 'Chuveiros automáticos (Sprinklers)'),
+      ItemSMSCI(titulo: 'Água nebulizada'),
+      ItemSMSCI(titulo: 'Fixo de gases limpos e dióxido de carbono'),
+    ];
+  }
+
+  /// Retorna itens SMSCI relacionados aos sistemas de detecção e alarme
+  List<ItemSMSCI> _obterSistemasDeteccaoAlarme() {
+    return [
+      ItemSMSCI(titulo: 'Detecção e Alarme de Incêndio'),
+      ItemSMSCI(titulo: 'Iluminação de Emergência'),
+      ItemSMSCI(titulo: 'Sinalização para abandono de local'),
+    ];
+  }
+
+  /// Retorna itens SMSCI relacionados aos sistemas de proteção estrutural
+  List<ItemSMSCI> _obterSistemasProtecaoEstrutural() {
+    return [
+      ItemSMSCI(titulo: 'Proteção contra descargas atmosféricas (SPDA)'),
+      ItemSMSCI(titulo: 'Controle de fumaça'),
+      ItemSMSCI(titulo: 'Controle de materiais de acabamento e revestimento'),
+      ItemSMSCI(titulo: 'Saídas de emergência'),
+      ItemSMSCI(titulo: 'Acesso de viaturas'),
+      ItemSMSCI(titulo: 'Compartimentação horizontal e vertical'),
+    ];
+  }
+
+  /// Retorna itens SMSCI relacionados às instalações de gás e elétricas
+  List<ItemSMSCI> _obterInstalacoesGasEletricas() {
+    return [
+      ItemSMSCI(titulo: 'Instalações de gás combustível'),
+      ItemSMSCI(titulo: 'Instalações elétricas de baixa tensão'),
+      ItemSMSCI(titulo: 'Comercialização de Gás combustível e armazenamento de recipiente'),
+    ];
+  }
+
+  /// Retorna itens SMSCI relacionados às áreas específicas
+  List<ItemSMSCI> _obterAreasEspecificas() {
+    return [
+      ItemSMSCI(titulo: 'Parque para armazenamentos de líquidos inflamáveis e combustíveis'),
+      ItemSMSCI(titulo: 'Rede pública de hidrantes'),
+      ItemSMSCI(titulo: 'Pátio de contêineres'),
+      ItemSMSCI(titulo: 'Locais onde a liberdade das pessoas sofre restrições'),
+      ItemSMSCI(titulo: 'Fogos de artifícios, explosivos e munições'),
+      ItemSMSCI(titulo: 'Piscinas e áreas recreativas com opção aquática de lazer'),
+      ItemSMSCI(titulo: 'Estufa de secagem e silos'),
+    ];
+  }
+
+  /// Retorna itens SMSCI relacionados aos planos e brigadas
+  List<ItemSMSCI> _obterPlanosEBrigadas() {
+    return [
+      ItemSMSCI(titulo: 'Brigada de Incêndio'),
+      ItemSMSCI(titulo: 'Plano de emergência'),
+    ];
+  }
+
+  /// Navega para a tela de detalhes do SMSCI selecionado
+  /// 
+  /// [item] - O item SMSCI selecionado
   void _navegarParaDetalhesSMSCI(ItemSMSCI item) {
-    // Implementação da navegação para a tela de detalhes do SMSCI
-    developer.log('Navegando para detalhes de: ${item.titulo}');
+    try {
+      // Registra a ação para facilitar a depuração
+      developer.log('Navegando para detalhes de: ${item.titulo}');
+      
+      // Usa o contexto salvo para navegação
+      Navigator.of(_buildContext).push(
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              title: Text('Detalhes: ${item.titulo}'),
+              backgroundColor: AppStyles.primaryOrange,
+              foregroundColor: Colors.white,
+            ),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(AppStyles.spacingMedium),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.info_outline,
+                      size: 48,
+                      color: AppStyles.primaryOrange,
+                    ),
+                    const SizedBox(height: AppStyles.spacingMedium),
+                    Text(
+                      'Detalhes do SMSCI: ${item.titulo}',
+                      style: AppStyles.titleMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppStyles.spacingLarge),
+                    const Text(
+                      'Aqui serão exibidos os detalhes e formulários para apontamentos deste item.',
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    } catch (e) {
+      // Tratamento de erro na navegação
+      developer.log('Erro ao navegar para detalhes do SMSCI: ${item.titulo}', error: e, level: 1);
+    }
   }
 }
 
