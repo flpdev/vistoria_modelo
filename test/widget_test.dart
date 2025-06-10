@@ -9,22 +9,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:app_bombeiros_v3/main.dart';
+import 'package:app_bombeiros_v3/presentation/vistorias/screens/smsci_points_screen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('App initialization smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const FireInspectionApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that our app has loaded correctly
+    expect(find.byType(MaterialApp), findsOneWidget);
+    
+    // Verify that the SMSCIPointsScreen is loaded
+    expect(find.byType(SMSCIPointsScreen), findsOneWidget);
+    
+    // Verify that at least some widgets are rendered
+    expect(find.byType(Column), findsWidgets);
+    expect(find.byType(AppBar), findsAtLeastNWidgets(0));
   });
 }

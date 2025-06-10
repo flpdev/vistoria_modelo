@@ -10,7 +10,7 @@ import '../utils/app_styles.dart';
 /// para os Sistemas e Medidas de Segurança Contra Incêndio e Pânico
 class SMSCICardWidget extends StatelessWidget {
   /// Título do SMSCI
-  final String titulo;
+  final String title;
   
   /// Função de callback para quando o card for pressionado
   final VoidCallback onTap;
@@ -18,14 +18,14 @@ class SMSCICardWidget extends StatelessWidget {
   /// Construtor do widget
   const SMSCICardWidget({
     super.key,
-    required this.titulo,
+    required this.title,
     required this.onTap,
   });
 
   /// Constrói o widget de ícone com tratamento de erro
-  Widget _buildIconWidget(String titulo) {
+  Widget _buildIconWidget(String smscType) {
     try {
-      final String iconPath = SMSCIIcons.getIconPath(titulo);
+      final String iconPath = SMSCIIcons.getIconPath(smscType);
       
       return SvgPicture.asset(
         iconPath,
@@ -40,7 +40,7 @@ class SMSCICardWidget extends StatelessWidget {
       );
     } catch (e) {
       // Em caso de erro, exibe um ícone de fallback e registra o erro
-      developer.log('Erro ao processar ícone para o SMSCI: $titulo', error: e);
+      developer.log('Erro ao processar ícone para o SMSCI: $smscType', error: e);
       return _buildFallbackIcon();
     }
   }
@@ -81,14 +81,14 @@ class SMSCICardWidget extends StatelessWidget {
               height: AppStyles.cardIconHeight,
               clipBehavior: Clip.antiAlias,
               decoration: const BoxDecoration(),
-              child: _buildIconWidget(titulo),
+              child: _buildIconWidget(title),
             ),
             SizedBox(height: AppStyles.spacingXSmall),
             SizedBox(
               width: AppStyles.cardTextWidth,
               height: AppStyles.cardTextHeight,
               child: Text(
-                titulo,
+                title,
                 textAlign: TextAlign.center,
                 maxLines: AppStyles.cardTextMaxLines.toInt(),
                 overflow: TextOverflow.ellipsis,

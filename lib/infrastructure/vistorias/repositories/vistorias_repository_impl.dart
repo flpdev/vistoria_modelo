@@ -13,20 +13,20 @@ class VistoriasRepositoryImpl implements VistoriasRepository {
     final mockList = <VistoriaDTO>[
       VistoriaDTO(
         id: '1',
-        tipo: 'Habite-se',
-        endereco: 'Rua das Flores, 123',
+        type: 'Habite-se',
+        address: 'Rua das Flores, 123',
         status: 'Em andamento',
       ),
       VistoriaDTO(
         id: '2',
-        tipo: 'Funcionamento',
-        endereco: 'Av. Central, 456',
+        type: 'Funcionamento',
+        address: 'Av. Central, 456',
         status: 'Na fila',
       ),
       VistoriaDTO(
         id: '3',
-        tipo: 'Interdição',
-        endereco: 'Praça da Liberdade, 789',
+        type: 'Interdição',
+        address: 'Praça da Liberdade, 789',
         status: 'Concluída',
       ),
     ];

@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/vistorias_provider.dart';
 import '../widgets/vistoria_card.dart';
 
-class VistoriasScreen extends ConsumerWidget {
-  const VistoriasScreen({super.key});
+class InspectionsScreen extends ConsumerWidget {
+  const InspectionsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +26,7 @@ class VistoriasScreen extends ConsumerWidget {
               itemCount: state.vistorias.length,
               itemBuilder: (context, index) {
                 final v = state.vistorias[index];
-                return VistoriaCard(vistoria: v);
+                return InspectionCard(vistoria: v);
               },
             ),
     );

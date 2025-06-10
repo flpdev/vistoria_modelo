@@ -6,15 +6,15 @@ import 'dart:developer' as developer;
 /// e os respectivos arquivos SVG, garantindo consistência na exibição dos ícones.
 class SMSCIIcons {
   // Mapeamentos por categoria para reduzir complexidade
-  static final Map<String, String> _documentacao = {
+  static final Map<String, String> _documentation = {
     'Documentos específicos dos SMSCI': 'icons/Documentos_especificos_dos_SMSCI.svg',
   };
 
-  static final Map<String, String> _caracteristicasEdificacao = {
+  static final Map<String, String> _buildingCharacteristics = {
     'Características gerais do Bloco': 'icons/caracteristicas_gerais_do_bloco.svg',
   };
 
-  static final Map<String, String> _sistemasCombateIncendio = {
+  static final Map<String, String> _fireExtinguishingSystems = {
     'Preventivo por extintores': 'icons/preventivo_por_extintores.svg',
     'Hidráulico preventivo': 'icons/hidraulico_preventivo.svg',
     'Chuveiros automáticos (Sprinklers)': 'icons/chuveiros_automaticos.svg',
@@ -22,13 +22,13 @@ class SMSCIIcons {
     'Fixo de gases limpos e dióxido de carbono': 'icons/Fixo_de_gases_limpos_e_dioxido_de_carbono.svg',
   };
 
-  static final Map<String, String> _sistemasDeteccaoAlarme = {
+  static final Map<String, String> _detectionAlarmSystems = {
     'Detecção e Alarme de Incêndio': 'icons/deteccao_e_Alarme_de_Incendio.svg',
     'Iluminação de Emergência': 'icons/Iluminacao_de_Emergencia.svg',
     'Sinalização para abandono de local': 'icons/Sinalizacao_para_Abandono_de_Local.svg',
   };
 
-  static final Map<String, String> _sistemasProtecaoEstrutural = {
+  static final Map<String, String> _structuralProtectionSystems = {
     'Proteção contra descargas atmosféricas (SPDA)': 'icons/protecao_contra_descargas_atmosfericas.svg',
     'Controle de fumaça': 'icons/Controle_de_Fumaca.svg',
     'Controle de materiais de acabamento e revestimento': 'icons/controle_de_materiais_de_acabamento_e_revestimento.svg',
@@ -37,13 +37,13 @@ class SMSCIIcons {
     'Compartimentação horizontal e vertical': 'icons/Compartimentacao_Horizontal_e_Vertical.svg',
   };
 
-  static final Map<String, String> _instalacoesGasEletricas = {
+  static final Map<String, String> _gasElectricalInstallations = {
     'Instalações de gás combustível': 'icons/Instalacoes_de_gas_combustivel.svg',
     'Instalações elétricas de baixa tensão': 'icons/Instalacoes_eletricas_de_baixa_tensao.svg',
     'Comercialização de Gás combustível e armazenamento de recipiente': 'icons/comercializacao_gas.svg',
   };
 
-  static final Map<String, String> _areasEspecificas = {
+  static final Map<String, String> _specificAreas = {
     'Parque para armazenamentos de líquidos inflamáveis e combustíveis': 'icons/parque_para_armazenamentos_de_liquidos_inflamaveis_e_combustiveis.svg',
     'Rede pública de hidrantes': 'icons/rede_publica_de_hidrantes.svg',
     'Pátio de contêineres': 'icons/patio_de_conteineres.svg',
@@ -53,7 +53,7 @@ class SMSCIIcons {
     'Estufa de secagem e silos': 'icons/estufa_de_secagem_e_silos.svg',
   };
 
-  static final Map<String, String> _planosEBrigadas = {
+  static final Map<String, String> _plansAndBrigades = {
     'Brigada de Incêndio': 'icons/brigada_de_incendio.svg',
     'Plano de emergência': 'icons/plano_de_emergencia.svg',
   };
@@ -80,20 +80,20 @@ class SMSCIIcons {
     return fileName;
   }
 
-  static String getIconPath(String tipoSMSCI) {
+  static String getIconPath(String smscType) {
     // Busca o ícone em cada categoria
-    String? iconPath = _documentacao[tipoSMSCI] ?? 
-                      _caracteristicasEdificacao[tipoSMSCI] ?? 
-                      _sistemasCombateIncendio[tipoSMSCI] ?? 
-                      _sistemasDeteccaoAlarme[tipoSMSCI] ?? 
-                      _sistemasProtecaoEstrutural[tipoSMSCI] ?? 
-                      _instalacoesGasEletricas[tipoSMSCI] ?? 
-                      _areasEspecificas[tipoSMSCI] ?? 
-                      _planosEBrigadas[tipoSMSCI];
+    String? iconPath = _documentation[smscType] ?? 
+                      _buildingCharacteristics[smscType] ?? 
+                      _fireExtinguishingSystems[smscType] ?? 
+                      _detectionAlarmSystems[smscType] ?? 
+                      _structuralProtectionSystems[smscType] ?? 
+                      _gasElectricalInstallations[smscType] ?? 
+                      _specificAreas[smscType] ?? 
+                      _plansAndBrigades[smscType];
     
     if (iconPath == null) {
       // Log de erro para facilitar a depuração
-      developer.log('Ícone não encontrado para o tipo SMSCI: $tipoSMSCI', level: 1);
+      developer.log('Ícone não encontrado para o tipo SMSCI: $smscType', level: 1);
       return 'icons/Documentos_especificos_dos_SMSCI.svg'; // Ícone padrão
     }
     

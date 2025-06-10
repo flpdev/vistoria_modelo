@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../domain/vistorias/entities/vistoria.dart';
 
-class VistoriaCard extends StatelessWidget {
+class InspectionCard extends StatelessWidget {
   final Vistoria vistoria;
 
-  const VistoriaCard({super.key, required this.vistoria});
+  const InspectionCard({super.key, required this.vistoria});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +14,10 @@ class VistoriaCard extends StatelessWidget {
       elevation: 2,
       child: ListTile(
         title: Text(
-          vistoria.tipo,
+          vistoria.type,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(vistoria.endereco),
+        subtitle: Text(vistoria.address),
         trailing: Text(
           vistoria.status,
           style: TextStyle(
