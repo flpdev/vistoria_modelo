@@ -68,6 +68,10 @@ class _IRVTablesModalState extends State<IRVTablesModal> {
         width: 664,
         constraints: const BoxConstraints(maxHeight: 700),
         padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFFFFF), // Cor de fundo branco
+          borderRadius: BorderRadius.circular(28), // Bordas arredondadas
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,6 +138,8 @@ class _IRVTablesModalState extends State<IRVTablesModal> {
               }
             });
           },
+          activeColor: const Color(0xFFE66F0E), // Cor laranja para o checkbox marcado
+          checkColor: Colors.white, // Cor do check dentro do checkbox
           controlAffinity: ListTileControlAffinity.leading,
           contentPadding: EdgeInsets.zero,
           dense: true,

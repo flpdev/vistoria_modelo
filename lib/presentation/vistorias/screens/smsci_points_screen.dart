@@ -20,6 +20,9 @@ class SMSCIPointsScreen extends StatefulWidget {
 class _SMSCIPointsScreenState extends State<SMSCIPointsScreen> {
   // Lista de itens SMSCI selecionados para as tabelas da IRV
   List<String> _selectedIRVItems = [];
+  
+  // Controle da aba selecionada
+  bool _isPointsTabSelected = true;
 
   
   @override
@@ -96,10 +99,103 @@ class _SMSCIPointsScreenState extends State<SMSCIPointsScreen> {
         const SizedBox(height: AppStyles.spacingExtraLarge), // gap: 2.5rem (40px)
         _buildTabs(),
         const SizedBox(height: AppStyles.spacingExtraLarge), // gap: 2.5rem (40px)
+        _isPointsTabSelected ? _buildPointsContent() : _buildDocumentsContent(),
+      ],
+    );
+  }
+  
+  // Conteúdo da aba de Apontamentos
+  Widget _buildPointsContent() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         _buildInstructions(),
         const SizedBox(height: AppStyles.spacingExtraLarge), // gap: 2.5rem (40px)
         _buildSMSCISection(),
       ],
+    );
+  }
+  
+  // Conteúdo da aba de Documentos
+  Widget _buildDocumentsContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Cabeçalho do documento
+          Padding(
+            padding: const EdgeInsets.only(left: 8, bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Nome do documento no SCI / Nome do arquivo 1',
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                const Text(
+                  'Documento 01 de 04',
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          // Área do documento com botões
+          Stack(
+            children: [
+              // Área do documento com borda
+              Container(
+                width: double.infinity,
+                height: 570, // Altura ajustada para corresponder à imagem
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F5F5), // Cinza claro
+                  border: Border.all(
+                    color: Colors.grey.shade300,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              // Botões circulares no canto superior direito
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    _buildCustomButton('<'),
+                    const SizedBox(width: 4), // Espaçamento reduzido para 4px
+                    _buildCustomButton('>'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // Botão circular personalizado para a tela de documentos
+  Widget _buildCustomButton(String symbol) {
+    return Container(
+      width: 48, // Tamanho exato de 48x48 pixels
+      height: 48,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color(0xFFFCE2C5), // Cor bege claro exata #FCE2C5
+      ),
+      child: Center(
+        child: Text(
+          symbol,
+          style: const TextStyle(
+            color: Color(0xFFE66F0E), // Laranja #E66F0E
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 
@@ -148,15 +244,29 @@ class _SMSCIPointsScreenState extends State<SMSCIPointsScreen> {
     return Row(
       children: [
         Expanded(
-          child: _buildTab(
-            title: 'Apontamentos',
-            selected: true,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _isPointsTabSelected = true;
+              });
+            },
+            child: _buildTab(
+              title: 'Apontamentos',
+              selected: _isPointsTabSelected,
+            ),
           ),
         ),
         Expanded(
-          child: _buildTab(
-            title: 'Documentos',
-            selected: false,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _isPointsTabSelected = false;
+              });
+            },
+            child: _buildTab(
+              title: 'Documentos',
+              selected: !_isPointsTabSelected,
+            ),
           ),
         ),
       ],
