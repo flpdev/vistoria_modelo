@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 import '../widgets/smsci_card_widget.dart';
+import '../widgets/irv_tables_modal.dart';
 import '../utils/app_styles.dart';
 
 /// Tela de Apontamentos por SMSCI
 /// 
 /// Exibe os Sistemas e Medidas de Segurança Contra Incêndio e Pânico
 /// para que o vistoriador possa registrar apontamentos de itens indeferidos.
-class SMSCIPointsScreen extends StatelessWidget {
+class SMSCIPointsScreen extends StatefulWidget {
   final String? inspectionId;
   
   const SMSCIPointsScreen({super.key, this.inspectionId});
+
+  @override
+  State<SMSCIPointsScreen> createState() => _SMSCIPointsScreenState();
+}
+
+class _SMSCIPointsScreenState extends State<SMSCIPointsScreen> {
+  // Lista de itens SMSCI selecionados para as tabelas da IRV
+  List<String> _selectedIRVItems = [];
+
   
   @override
   Widget build(BuildContext context) {
@@ -168,9 +178,12 @@ class SMSCIPointsScreen extends StatelessWidget {
           ),
         ),
       ),
-      child: Text(
-        title,
-        style: selected ? AppStyles.tabSelected : AppStyles.tabUnselected,
+      child: Center(
+        child: Text(
+          title,
+          style: selected ? AppStyles.tabSelected : AppStyles.tabUnselected,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -185,7 +198,9 @@ class SMSCIPointsScreen extends StatelessWidget {
           ),
         ),
         OutlinedButton.icon(
-          onPressed: () {},
+          onPressed: () {
+            _showIRVTablesModal();
+          },
           icon: const Icon(Icons.table_chart, size: 18),
           label: const Text('Tabelas da IRV'),
           style: OutlinedButton.styleFrom(
@@ -212,6 +227,24 @@ class SMSCIPointsScreen extends StatelessWidget {
         const SizedBox(height: 8),
         _buildSMSCIGrid(),
       ],
+    );
+  }
+
+  /// Exibe o modal de tabelas da IRV
+  void _showIRVTablesModal() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return IRVTablesModal(
+          selectedItems: _selectedIRVItems,
+          onSave: (selectedItems) {
+            setState(() {
+              _selectedIRVItems = selectedItems;
+              developer.log('Itens selecionados: $_selectedIRVItems');
+            });
+          },
+        );
+      },
     );
   }
 
